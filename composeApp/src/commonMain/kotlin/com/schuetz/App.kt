@@ -14,14 +14,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import agents.composeapp.generated.resources.Res
 import agents.composeapp.generated.resources.compose_multiplatform
-import androidx.compose.material3.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import io.ktor.client.statement.HttpResponse
 
 @Composable
 @Preview
 fun App() {
+    val client = remember { HttpClientFactory.create(engine) }
+    var httpResponseResult by remember { mutableStateOf<Result<HttpResponse>?>(null) }
+    LaunchedEffect(client) {
+        httpResponseResult = client.safeGet("http://localhost:8080")
+        println("result: $httpResponseResult")
+    }
+
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -35,7 +43,10 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Text("Compose: $greeting")
                 }
