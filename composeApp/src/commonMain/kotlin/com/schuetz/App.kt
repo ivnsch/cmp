@@ -18,7 +18,12 @@ import agents.composeapp.generated.resources.Res
 import agents.composeapp.generated.resources.compose_multiplatform
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpMethod
+import io.ktor.websocket.Frame
+import io.ktor.websocket.readText
+import io.ktor.websocket.send
 
 @Composable
 @Preview
@@ -28,6 +33,19 @@ fun App(deps: Deps) {
         val serverUrl = "http://$host:8080"
         httpResponseResult = deps.client.safeGet(serverUrl)
         println("result: $httpResponseResult")
+
+        deps.socketsClient.webSocket(
+            method = HttpMethod.Get,
+            host = host,
+            port = 8080,
+            path = "/echo"
+        ) {
+            val othersMessage = incoming.receive() as? Frame.Text
+            println(othersMessage?.readText())
+            send("somename")
+            val reply = incoming.receive() as? Frame.Text
+            println(reply?.readText())
+        }
     }
 
     MaterialTheme {
@@ -39,7 +57,11 @@ fun App(deps: Deps) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(httpResponseResult.toString())
-            Button(onClick = { showContent = !showContent }) {
+            Button(onClick = {
+                showContent = !showContent
+
+
+            }) {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
