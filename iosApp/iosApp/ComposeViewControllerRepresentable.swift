@@ -1,7 +1,6 @@
 import UIKit
 import SwiftUI
 import ComposeApp
-import MapKit
 
 struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
