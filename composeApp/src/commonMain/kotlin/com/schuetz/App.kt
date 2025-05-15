@@ -22,11 +22,10 @@ import io.ktor.client.statement.HttpResponse
 
 @Composable
 @Preview
-fun App() {
-    val client = remember { HttpClientFactory.create(engine) }
+fun App(deps: Deps) {
     var httpResponseResult by remember { mutableStateOf<Result<HttpResponse>?>(null) }
-    LaunchedEffect(client) {
-        httpResponseResult = client.safeGet("http://localhost:8080")
+    LaunchedEffect(deps.client) {
+        httpResponseResult = deps.client.safeGet("http://localhost:8080")
         println("result: $httpResponseResult")
     }
 
@@ -38,6 +37,7 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(httpResponseResult.toString())
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
             }
