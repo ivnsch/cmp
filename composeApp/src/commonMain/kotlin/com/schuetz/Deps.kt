@@ -7,3 +7,5 @@ class Deps {
 }
 
 expect val engine: HttpClientEngine
+
+expect val host: String

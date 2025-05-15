@@ -25,7 +25,8 @@ import io.ktor.client.statement.HttpResponse
 fun App(deps: Deps) {
     var httpResponseResult by remember { mutableStateOf<Result<HttpResponse>?>(null) }
     LaunchedEffect(deps.client) {
-        httpResponseResult = deps.client.safeGet("http://localhost:8080")
+        val serverUrl = "http://$host:8080"
+        httpResponseResult = deps.client.safeGet(serverUrl)
         println("result: $httpResponseResult")
     }
 
