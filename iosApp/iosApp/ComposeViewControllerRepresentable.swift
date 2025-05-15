@@ -4,7 +4,7 @@ import ComposeApp
 
 struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return Main_iosKt.ComposeEntryPointWithUIViewController(createUIViewController: { () -> UIViewController in
+        return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { () -> UIViewController in
             let swiftUIView = VStack {
                 Text("SwiftUI in Compose Multiplatform")
             }
