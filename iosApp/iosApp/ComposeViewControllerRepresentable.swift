@@ -4,7 +4,9 @@ import ComposeApp
 
 struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { () -> UIViewController in
+        return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { (par: KotlinDouble) -> UIViewController in
+            let sceneView = MySceneView()
+            sceneView.rotateShip(by: par.doubleValue)
             let swiftUIView = VStack {
                 Text("SwiftUI in Compose Multiplatform")
                 Button("Press me", action: {
@@ -16,7 +18,7 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
                     GreetingObj().greetPrintFunctionInObj()
                     GreetingKt.greetPrintFunction()
                 })
-                MySceneView()
+                sceneView
             }
             return UIHostingController(rootView: swiftUIView)
         })

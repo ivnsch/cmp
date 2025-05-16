@@ -2,7 +2,7 @@ import SwiftUI
 import SceneKit
 
 struct MySceneView: View {
-    var scene: SCNScene {
+    @State private var scene: SCNScene = {
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
 
         // Camera
@@ -24,14 +24,12 @@ struct MySceneView: View {
         ambientLightNode.light!.type = .ambient
         ambientLightNode.light!.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
-
-        // Ship Animation
-        if let ship = scene.rootNode.childNode(withName: "ship", recursively: true) {
-            let rotateAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1))
-            ship.runAction(rotateAction)
-        }
-
+        
         return scene
+    }()
+    
+    func ship(scene: SCNScene) -> SCNNode? {
+        return scene.rootNode.childNode(withName: "ship", recursively: true)
     }
 
     var body: some View {
@@ -45,5 +43,11 @@ struct MySceneView: View {
         )
         .background(Color.black)
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func rotateShip(by: Double) {
+        let action = SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)
+        let ship = ship(scene: scene)
+        ship?.runAction(action)
     }
 }

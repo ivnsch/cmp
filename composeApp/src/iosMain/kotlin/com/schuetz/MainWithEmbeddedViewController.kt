@@ -19,9 +19,11 @@ import platform.UIKit.UIViewController
 
 @OptIn(ExperimentalForeignApi::class)
 fun ComposeEntryPointWithUIViewController(
-    createUIViewController: () -> UIViewController
-): UIViewController =
-    ComposeUIViewController {
+    createUIViewController: (Double) -> UIViewController
+): UIViewController {
+    val rotateBy = 2.0
+
+    return ComposeUIViewController {
         Column(
             Modifier
                 .fillMaxSize()
@@ -30,8 +32,12 @@ fun ComposeEntryPointWithUIViewController(
         ) {
             Text("How to use SwiftUI inside Compose Multiplatform")
             UIKitViewController(
-                factory = createUIViewController,
+                factory = {
+                    createUIViewController(rotateBy)
+                },
                 modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
             )
         }
     }
+}
+
