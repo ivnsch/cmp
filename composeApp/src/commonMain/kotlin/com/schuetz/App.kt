@@ -45,6 +45,13 @@ fun App(deps: Deps) {
             send("somename")
             val reply = incoming.receive() as? Frame.Text
             println(reply?.readText())
+
+            for (frame in incoming) {
+                if (frame is Frame.Text) {
+                    val number = frame.readText()
+                    println("Received number: $number")
+                }
+            }
         }
     }
 
