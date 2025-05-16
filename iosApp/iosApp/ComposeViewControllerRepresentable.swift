@@ -7,6 +7,15 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
         return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { () -> UIViewController in
             let swiftUIView = VStack {
                 Text("SwiftUI in Compose Multiplatform")
+                Button("Press me", action: {
+                    print("!!!")
+                    let greeting = Greeting().greet()
+                    print(greeting)
+                    Greeting().greetPrint(parameter: "myname")
+                    // this is a bit awkard, since as an object it shouldn't have to be instantiated?
+                    GreetingObj().greetPrintFunctionInObj()
+                    GreetingKt.greetPrintFunction()
+                })
             }
             return UIHostingController(rootView: swiftUIView)
         })
