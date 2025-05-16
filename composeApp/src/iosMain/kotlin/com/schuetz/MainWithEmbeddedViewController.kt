@@ -22,6 +22,7 @@ fun ComposeEntryPointWithUIViewController(
     createUIViewController: (Double) -> UIViewController
 ): UIViewController {
     val rotateBy = 2.0
+    val deps = Deps()
 
     return ComposeUIViewController {
         Column(

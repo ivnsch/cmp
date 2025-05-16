@@ -3,11 +3,18 @@ import SwiftUI
 import ComposeApp
 
 struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
+    let deps: Deps
+    init(deps: Deps) {
+        self.deps = deps
+    }
+    
     func makeUIViewController(context: Context) -> UIViewController {
         return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { (par: KotlinDouble) -> UIViewController in
             let sceneView = MySceneView()
+
             Task {
-                for await radians in RadiansFlowProvider().radiansFlow {
+                for try await radians in deps.webSockets.radiansFlow() {
+                    print("Received in Swift: \(radians)")
                     sceneView.rotateShip(by: radians.doubleValue)
                 }
             }

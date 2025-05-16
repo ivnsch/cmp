@@ -11,6 +11,9 @@ class Deps {
             install(WebSockets)
         }
     }
+    val webSockets by lazy {
+        WebSockets(socketsClient)
+    }
 }
 
 expect val engine: HttpClientEngine

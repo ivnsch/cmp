@@ -54,6 +54,10 @@ fun Application.module() {
                     close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
                 } else {
                     send("Hi, $receivedText!")
+                    while (true) {
+                        send("1")
+                        Thread.sleep(2000)
+                    }
                 }
             }
         }
