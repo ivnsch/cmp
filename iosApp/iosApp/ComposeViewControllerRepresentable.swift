@@ -6,7 +6,12 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { (par: KotlinDouble) -> UIViewController in
             let sceneView = MySceneView()
-            sceneView.rotateShip(by: par.doubleValue)
+            Task {
+                for await radians in RadiansFlowProvider().radiansFlow {
+                    sceneView.rotateShip(by: radians.doubleValue)
+                }
+            }
+            
             let swiftUIView = VStack {
                 Text("SwiftUI in Compose Multiplatform")
                 Button("Press me", action: {
