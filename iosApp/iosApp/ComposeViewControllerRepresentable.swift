@@ -16,6 +16,7 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
                     GreetingObj().greetPrintFunctionInObj()
                     GreetingKt.greetPrintFunction()
                 })
+                MySceneView()
             }
             return UIHostingController(rootView: swiftUIView)
         })
