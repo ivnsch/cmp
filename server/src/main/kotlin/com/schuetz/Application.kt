@@ -18,6 +18,7 @@ import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlin.time.Duration.Companion.seconds
 import io.ktor.websocket.send
+import kotlinx.coroutines.delay
 
 fun main() {
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
@@ -56,7 +57,7 @@ fun Application.module() {
                     send("Hi, $receivedText!")
                     while (true) {
                         send("1")
-                        Thread.sleep(2000)
+                        delay(2000)
                     }
                 }
             }
