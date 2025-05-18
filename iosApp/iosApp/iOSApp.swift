@@ -7,7 +7,8 @@ struct iOSApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(deps: deps)
+            ComposeViewControllerRepresentable(deps: deps)
+                .ignoresSafeArea(.all)
         }
     }
 }
