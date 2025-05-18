@@ -2,6 +2,7 @@ package com.schuetz
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -16,14 +17,21 @@ fun create(
 ): UIViewController {
     return ComposeUIViewController {
         MainContent(embedded = {
-            UIKitViewController(
-                factory = createUIViewController,
-                modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
-                properties = UIKitInteropProperties(
-                    isInteractive = true,
-                    isNativeAccessibilityEnabled = true
-                )
-            )
+            IOSEmbedded(createUIViewController)
         })
     }
+}
+
+@Composable
+fun IOSEmbedded(
+    createUIViewController: () -> UIViewController
+) {
+    UIKitViewController(
+        factory = createUIViewController,
+        modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
+        properties = UIKitInteropProperties(
+            isInteractive = true,
+            isNativeAccessibilityEnabled = true
+        )
+    )
 }

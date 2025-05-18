@@ -45,13 +45,18 @@ fun App(deps: Deps) {
     }
 
     MainContent(embedded = {
-        Box(
-            modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("${radians.value}")
-        }
+        CommonEmbedded(radians.value)
     })
+}
+
+@Composable
+fun CommonEmbedded(radians: Double) {
+    Box(
+        modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("$radians")
+    }
 }
 
 @Composable
