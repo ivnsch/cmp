@@ -9,7 +9,7 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> UIViewController {
-        return MainWithEmbeddedViewControllerKt.ComposeEntryPointWithUIViewController(createUIViewController: { (par: KotlinDouble) -> UIViewController in
+        return MainWithEmbeddedViewControllerKt.composeEntryPointWithUIViewController(createUIViewController: { (par: KotlinDouble) -> UIViewController in
             let sceneView = MySceneView()
 
             Task {

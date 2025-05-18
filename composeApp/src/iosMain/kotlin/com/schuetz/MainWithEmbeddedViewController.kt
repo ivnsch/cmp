@@ -17,7 +17,8 @@ import androidx.compose.ui.viewinterop.UIKitViewController
 import androidx.compose.ui.window.ComposeUIViewController
 import platform.UIKit.UIViewController
 
-fun ComposeEntryPointWithUIViewController(
+@Suppress("unused")
+fun composeEntryPointWithUIViewController(
     createUIViewController: (Double) -> UIViewController
 ): UIViewController {
     val rotateBy = 2.0
