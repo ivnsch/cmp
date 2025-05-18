@@ -15,7 +15,7 @@ class WebSockets(private val client: HttpClient) {
             method = HttpMethod.Get,
             host = host,
             port = 8080,
-            path = "/echo"
+            path = "/radians"
         ) {
             println("Connected to websocket")
             send("start")

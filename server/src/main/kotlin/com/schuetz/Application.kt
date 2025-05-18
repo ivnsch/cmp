@@ -47,7 +47,7 @@ fun Application.module() {
             call.respondText("Ktor: ${Greeting().greet()}")
         }
 
-        webSocket("/echo") {
+        webSocket("/radians") {
 
             for (frame in incoming) {
                 frame as? Frame.Text ?: continue
