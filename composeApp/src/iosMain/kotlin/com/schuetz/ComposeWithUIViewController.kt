@@ -9,26 +9,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
 import androidx.compose.ui.viewinterop.UIKitViewController
 import androidx.compose.ui.window.ComposeUIViewController
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIViewController
+import platform.darwin.sel_registerName
 
 @Suppress("unused")
 fun create(
+    deps: Deps,
     createUIViewController: () -> UIViewController
 ): UIViewController {
     return ComposeUIViewController {
-        MainContent(embedded = {
-            IOSEmbedded(createUIViewController)
+        MainContent(deps, embedded = { radians ->
+            IOSEmbedded(createUIViewController, radians)
         })
     }
 }
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 fun IOSEmbedded(
-    createUIViewController: () -> UIViewController
+    createUIViewController: () -> UIViewController,
+    radians: Double
 ) {
     UIKitViewController(
         factory = createUIViewController,
         modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
+        update = { viewController ->
+            val selector = sel_registerName("updateRadians:")
+            if (viewController.respondsToSelector(selector)) {
+                viewController.performSelector(
+                    selector,
+                    withObject = radians
+                )
+            }
+        },
         properties = UIKitInteropProperties(
             isInteractive = true,
             isNativeAccessibilityEnabled = true

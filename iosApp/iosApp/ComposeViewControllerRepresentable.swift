@@ -9,7 +9,7 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> UIViewController {
-        return ComposeWithUIViewControllerKt.create(createUIViewController: { () -> UIViewController in
+        return ComposeWithUIViewControllerKt.create(deps: deps, createUIViewController: { () -> UIViewController in
             SceneViewController(deps: deps)
         })
     }
@@ -34,14 +34,6 @@ class SceneViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Task {
-            for try await radians in deps.webSockets.radiansFlow() {
-                print("Received in Swift: \(radians)")
-                sceneView.rotateShip(by: radians.doubleValue)
-            }
-        }
-        
         let swiftUIView = createSwiftUIView()
         addAsHostingController(view: swiftUIView)
     }
@@ -69,5 +61,10 @@ class SceneViewController: UIViewController {
         hostingController.didMove(toParent: self)
         addChild(hostingController)
         self.view.addSubview(hostingController.view)
+    }
+    
+    @objc func updateRadians(_ radians: Double) {
+        print("Received in Swift: \(radians)")
+        sceneView.rotateShip(by: radians)
     }
 }

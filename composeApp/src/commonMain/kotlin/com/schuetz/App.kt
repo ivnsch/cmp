@@ -32,20 +32,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App(deps: Deps) {
-    val radians = remember { mutableStateOf(0.0) }
-
-    LaunchedEffect(deps.webSockets) {
-        deps.webSockets.radiansFlow().onEach {
-            radians.value = it
-        }.catch { e ->
-            println("Error in radiansFlow: ${e.message}")
-            e.printStackTrace()
-        }
-            .collect { value -> println("Got a value: $value") }
-    }
-
-    MainContent(embedded = {
-        CommonEmbedded(radians.value)
+    MainContent(deps, embedded = { radians ->
+        CommonEmbedded(radians)
     })
 }
 
@@ -60,7 +48,19 @@ fun CommonEmbedded(radians: Double) {
 }
 
 @Composable
-fun MainContent(embedded: @Composable () -> Unit) {
+fun MainContent(deps: Deps, embedded: @Composable (Double) -> Unit) {
+    val radians = remember { mutableStateOf(0.0) }
+
+    LaunchedEffect(deps.webSockets) {
+        deps.webSockets.radiansFlow().onEach {
+            radians.value = it
+        }.catch { e ->
+            println("Error in radiansFlow: ${e.message}")
+            e.printStackTrace()
+        }
+            .collect { value -> println("Got a value: $value") }
+    }
+
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -69,7 +69,7 @@ fun MainContent(embedded: @Composable () -> Unit) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            embedded()
+            embedded(radians.value)
 
             Button(onClick = {
                 showContent = !showContent
