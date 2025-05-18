@@ -1,14 +1,7 @@
 package com.schuetz
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -24,13 +17,7 @@ fun create(
     val rotateBy = 2.0
 
     return ComposeUIViewController {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.systemBars),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("How to use SwiftUI inside Compose Multiplatform")
+        MainContent {
             UIKitViewController(
                 factory = {
                     createUIViewController(rotateBy)
@@ -44,4 +31,3 @@ fun create(
         }
     }
 }
-

@@ -5,9 +5,12 @@ import agents.composeapp.generated.resources.compose_multiplatform
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,5 +65,18 @@ fun App(deps: Deps) {
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun MainContent(embedded: @Composable () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        embedded()
     }
 }
