@@ -24,6 +24,9 @@ import io.ktor.http.HttpMethod
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.subscribe
 
 @Composable
 @Preview
@@ -34,25 +37,13 @@ fun App(deps: Deps) {
         httpResponseResult = deps.client.safeGet(serverUrl)
         println("result: $httpResponseResult")
 
-        deps.socketsClient.webSocket(
-            method = HttpMethod.Get,
-            host = host,
-            port = 8080,
-            path = "/echo"
-        ) {
-            val othersMessage = incoming.receive() as? Frame.Text
-            println(othersMessage?.readText())
-            send("somename")
-            val reply = incoming.receive() as? Frame.Text
-            println(reply?.readText())
-
-            for (frame in incoming) {
-                if (frame is Frame.Text) {
-                    val number = frame.readText()
-                    println("Received number: $number")
-                }
-            }
+        deps.webSockets.radiansFlow().onEach {
+            println(it)
+        }.catch { e ->
+            println("Error in radiansFlow: ${e.message}")
+            e.printStackTrace()
         }
+            .collect { value -> println("Got a value: $value") }
     }
 
     MaterialTheme {

@@ -6,7 +6,7 @@ import io.ktor.client.plugins.websocket.WebSockets
 
 class Deps {
     val client by lazy { HttpClientFactory.create(engine) }
-    val socketsClient by lazy {
+    private val socketsClient by lazy {
         HttpClient {
             install(WebSockets)
         }
