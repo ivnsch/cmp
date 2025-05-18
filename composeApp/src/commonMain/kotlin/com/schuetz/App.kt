@@ -32,9 +32,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App(deps: Deps) {
+    val radians = remember { mutableStateOf(0.0) }
+
     LaunchedEffect(deps.webSockets) {
         deps.webSockets.radiansFlow().onEach {
-            println(it)
+            radians.value = it
         }.catch { e ->
             println("Error in radiansFlow: ${e.message}")
             e.printStackTrace()
@@ -44,8 +46,11 @@ fun App(deps: Deps) {
 
     MainContent(embedded = {
         Box(
-            modifier = Modifier.size(300.dp).border(2.dp, Color.Blue)
-        )
+            modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("${radians.value}")
+        }
     })
 }
 
