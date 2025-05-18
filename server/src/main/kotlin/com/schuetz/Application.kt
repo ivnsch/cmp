@@ -19,6 +19,7 @@ import io.ktor.websocket.readText
 import kotlin.time.Duration.Companion.seconds
 import io.ktor.websocket.send
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 fun main() {
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
@@ -56,7 +57,7 @@ fun Application.module() {
                 } else {
                     send("Hi, $receivedText!")
                     while (true) {
-                        send("1")
+                        send("${Random.nextDouble(0.0, 1.0)}")
                         delay(2000)
                     }
                 }
