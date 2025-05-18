@@ -28,12 +28,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App(deps: Deps) {
-    var httpResponseResult by remember { mutableStateOf<Result<HttpResponse>?>(null) }
-    LaunchedEffect(deps.client) {
-        val serverUrl = "http://$host:8080"
-        httpResponseResult = deps.client.safeGet(serverUrl)
-        println("result: $httpResponseResult")
-
+    LaunchedEffect(deps.webSockets) {
         deps.webSockets.radiansFlow().onEach {
             println(it)
         }.catch { e ->
@@ -51,10 +46,8 @@ fun App(deps: Deps) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(httpResponseResult.toString())
             Button(onClick = {
                 showContent = !showContent
-
 
             }) {
                 Text("Click me!")
