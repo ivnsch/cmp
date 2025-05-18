@@ -10,32 +10,64 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIViewController {
         return ComposeWithUIViewControllerKt.create(createUIViewController: { () -> UIViewController in
-            let sceneView = MySceneView()
-
-            Task {
-                for try await radians in deps.webSockets.radiansFlow() {
-                    print("Received in Swift: \(radians)")
-                    sceneView.rotateShip(by: radians.doubleValue)
-                }
-            }
-            
-            let swiftUIView = VStack {
-                Text("SwiftUI in Compose Multiplatform")
-                Button("Press me", action: {
-                    print("!!!")
-                    let greeting = Greeting().greet()
-                    print(greeting)
-                    Greeting().greetPrint(parameter: "myname")
-                    // this is a bit awkard, since as an object it shouldn't have to be instantiated?
-                    GreetingObj().greetPrintFunctionInObj()
-                    GreetingKt.greetPrintFunction()
-                })
-                sceneView
-            }
-            return UIHostingController(rootView: swiftUIView)
+            SceneViewController(deps: deps)
         })
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
+}
+
+class SceneViewController: UIViewController {
+    let deps: Deps
+    
+    let sceneView = MySceneView()
+
+    init(deps: Deps) {
+        self.deps = deps
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        Task {
+            for try await radians in deps.webSockets.radiansFlow() {
+                print("Received in Swift: \(radians)")
+                sceneView.rotateShip(by: radians.doubleValue)
+            }
+        }
+        
+        let swiftUIView = createSwiftUIView()
+        addAsHostingController(view: swiftUIView)
+    }
+    
+    private func createSwiftUIView() -> some View {
+        VStack {
+            Text("SwiftUI in Compose Multiplatform")
+            Button("Press me", action: {
+                print("!!!")
+                let greeting = Greeting().greet()
+                print(greeting)
+                Greeting().greetPrint(parameter: "myname")
+                // this is a bit awkard, since as an object it shouldn't have to be instantiated?
+                GreetingObj().greetPrintFunctionInObj()
+                GreetingKt.greetPrintFunction()
+            })
+            sceneView
+        }
+    }
+    
+    private func addAsHostingController<V: View>(view: V) {
+        let hostingController = UIHostingController(rootView: view)
+        hostingController.view.frame = self.view.bounds
+        hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        hostingController.didMove(toParent: self)
+        addChild(hostingController)
+        self.view.addSubview(hostingController.view)
     }
 }
