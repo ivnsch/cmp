@@ -48,18 +48,18 @@ fun Application.module() {
         }
 
         webSocket("/echo") {
-            send("Please enter your name")
+
             for (frame in incoming) {
                 frame as? Frame.Text ?: continue
-                val receivedText = frame.readText()
-                if (receivedText.equals("bye", ignoreCase = true)) {
-                    close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
-                } else {
-                    send("Hi, $receivedText!")
-                    while (true) {
+
+                when (val receivedText = frame.readText()) {
+                    "bye" -> close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
+                    "start" -> while (true) {
                         send("${Random.nextDouble(0.0, 1.0)}")
                         delay(2000)
                     }
+
+                    else -> send("unexpected payload: $receivedText!")
                 }
             }
         }

@@ -18,8 +18,7 @@ class WebSockets(private val client: HttpClient) {
             path = "/echo"
         ) {
             println("Connected to websocket")
-            send("somename")
-
+            send("start")
             for (frame in incoming) {
                 if (frame is Frame.Text) {
                     val message = frame.readText()
