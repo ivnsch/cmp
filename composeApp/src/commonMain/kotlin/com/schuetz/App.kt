@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
