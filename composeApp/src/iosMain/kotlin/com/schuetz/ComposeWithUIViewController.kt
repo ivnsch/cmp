@@ -17,7 +17,7 @@ fun create(
     val rotateBy = 2.0
 
     return ComposeUIViewController {
-        MainContent {
+        MainContent(embedded = {
             UIKitViewController(
                 factory = {
                     createUIViewController(rotateBy)
@@ -28,6 +28,6 @@ fun create(
                     isNativeAccessibilityEnabled = true
                 )
             )
-        }
+        })
     }
 }

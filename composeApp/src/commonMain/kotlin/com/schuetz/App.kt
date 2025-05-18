@@ -4,13 +4,13 @@ import agents.composeapp.generated.resources.Res
 import agents.composeapp.generated.resources.compose_multiplatform
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
@@ -40,6 +42,15 @@ fun App(deps: Deps) {
             .collect { value -> println("Got a value: $value") }
     }
 
+    MainContent(embedded = {
+        Box(
+            modifier = Modifier.size(300.dp).border(2.dp, Color.Blue)
+        )
+    })
+}
+
+@Composable
+fun MainContent(embedded: @Composable () -> Unit) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -48,6 +59,8 @@ fun App(deps: Deps) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            embedded()
+
             Button(onClick = {
                 showContent = !showContent
 
@@ -65,18 +78,5 @@ fun App(deps: Deps) {
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun MainContent(embedded: @Composable () -> Unit) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        embedded()
     }
 }
