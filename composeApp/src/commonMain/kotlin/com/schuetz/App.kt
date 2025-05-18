@@ -15,7 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,19 +48,12 @@ fun CommonEmbedded(radians: Double) {
 
 @Composable
 fun MainContent(deps: Deps, embedded: @Composable (Double) -> Unit) {
-    val radians = remember { mutableStateOf(0.0) }
-
-    LaunchedEffect(deps.webSockets) {
-        deps.webSockets.radiansFlow()
-            .catch { e ->
-                println("Error in radiansFlow: ${e.message}")
-                e.printStackTrace()
-            }
-            .collect { value ->
-                radians.value = value
-                println("Got a value: $value")
-            }
-    }
+    val radians = deps.webSockets.radiansFlow()
+        .catch { e ->
+            println("Error in radiansFlow: ${e.message}")
+            e.printStackTrace()
+        }
+        .collectAsState(initial = 0.0)
 
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
