@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -52,13 +51,15 @@ fun MainContent(deps: Deps, embedded: @Composable (Double) -> Unit) {
     val radians = remember { mutableStateOf(0.0) }
 
     LaunchedEffect(deps.webSockets) {
-        deps.webSockets.radiansFlow().onEach {
-            radians.value = it
-        }.catch { e ->
-            println("Error in radiansFlow: ${e.message}")
-            e.printStackTrace()
-        }
-            .collect { value -> println("Got a value: $value") }
+        deps.webSockets.radiansFlow()
+            .catch { e ->
+                println("Error in radiansFlow: ${e.message}")
+                e.printStackTrace()
+            }
+            .collect { value ->
+                radians.value = value
+                println("Got a value: $value")
+            }
     }
 
     MaterialTheme {
