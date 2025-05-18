@@ -12,16 +12,12 @@ import platform.UIKit.UIViewController
 
 @Suppress("unused")
 fun create(
-    createUIViewController: (Double) -> UIViewController
+    createUIViewController: () -> UIViewController
 ): UIViewController {
-    val rotateBy = 2.0
-
     return ComposeUIViewController {
         MainContent(embedded = {
             UIKitViewController(
-                factory = {
-                    createUIViewController(rotateBy)
-                },
+                factory = createUIViewController,
                 modifier = Modifier.size(300.dp).border(2.dp, Color.Blue),
                 properties = UIKitInteropProperties(
                     isInteractive = true,
