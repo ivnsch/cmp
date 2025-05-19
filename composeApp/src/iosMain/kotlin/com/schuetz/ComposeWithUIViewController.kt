@@ -19,7 +19,7 @@ fun create(
     createUIViewController: () -> UIViewController
 ): UIViewController {
     return ComposeUIViewController {
-        MainContent(deps, embedded = { radians ->
+        MainContent(deps.webSockets, embedded = { radians ->
             IOSEmbedded(createUIViewController, radians)
         })
     }

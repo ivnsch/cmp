@@ -20,7 +20,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App(deps: Deps) {
-    MainContent(deps, embedded = { radians ->
+    MainContent(deps.webSockets, embedded = { radians ->
         CommonEmbedded(radians)
     })
 }
@@ -36,8 +36,8 @@ fun CommonEmbedded(radians: Double) {
 }
 
 @Composable
-fun MainContent(deps: Deps, embedded: @Composable (Double) -> Unit) {
-    val radians = deps.webSockets.radiansFlow()
+fun MainContent(webSockets: WebSockets, embedded: @Composable (Double) -> Unit) {
+    val radians = webSockets.radiansFlow()
         .catch { e ->
             println("Error in radiansFlow: ${e.message}")
             e.printStackTrace()
