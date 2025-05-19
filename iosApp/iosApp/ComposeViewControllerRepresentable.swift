@@ -3,14 +3,10 @@ import SwiftUI
 import ComposeApp
 
 struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
-    let deps: Deps
-    init(deps: Deps) {
-        self.deps = deps
-    }
     
     func makeUIViewController(context: Context) -> UIViewController {
-        return ComposeWithUIViewControllerKt.create(deps: deps, createUIViewController: { () -> UIViewController in
-            SceneViewController(deps: deps)
+        return ComposeWithUIViewControllerKt.create(createUIViewController: { () -> UIViewController in
+            SceneViewController()
         })
     }
 
@@ -19,19 +15,8 @@ struct ComposeViewControllerRepresentable: UIViewControllerRepresentable {
 }
 
 class SceneViewController: UIViewController {
-    let deps: Deps
-    
     let sceneView = MySceneView()
 
-    init(deps: Deps) {
-        self.deps = deps
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let swiftUIView = createSwiftUIView()

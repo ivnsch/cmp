@@ -14,18 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.catch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Preview
-fun App(
-    deps: Deps,
-) {
-    val viewModel: MainViewModel = viewModel {
-        MainViewModel(deps.webSockets)
-    }
+fun App() {
+    val viewModel = koinViewModel<MainViewModel>()
 
     MainScreen(viewModel, embedded = { radians ->
         CommonEmbedded(radians)

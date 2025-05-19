@@ -9,17 +9,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
 import androidx.compose.ui.viewinterop.UIKitViewController
 import androidx.compose.ui.window.ComposeUIViewController
+import com.schuetz.di.initKoin
 import kotlinx.cinterop.ExperimentalForeignApi
+import org.koin.compose.viewmodel.koinViewModel
 import platform.UIKit.UIViewController
 import platform.darwin.sel_registerName
 
 @Suppress("unused")
 fun create(
-    deps: Deps,
     createUIViewController: () -> UIViewController
 ): UIViewController {
-    val viewModel = MainViewModel(deps.webSockets)
-    return ComposeUIViewController {
+    return ComposeUIViewController(configure = {
+        initKoin()
+    }) {
+        val viewModel = koinViewModel<MainViewModel>()
         MainScreen(viewModel, embedded = { radians ->
             IOSEmbedded(createUIViewController, radians)
         })
