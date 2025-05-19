@@ -14,13 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.catch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun App(deps: Deps) {
-    MainContent(deps.webSockets, embedded = { radians ->
+fun App(
+    deps: Deps,
+) {
+    val viewModel: MainViewModel = viewModel {
+        MainViewModel(deps.webSockets)
+    }
+
+    MainScreen(viewModel, embedded = { radians ->
         CommonEmbedded(radians)
     })
 }
@@ -36,8 +43,8 @@ fun CommonEmbedded(radians: Double) {
 }
 
 @Composable
-fun MainContent(webSockets: WebSockets, embedded: @Composable (Double) -> Unit) {
-    val radians = webSockets.radiansFlow()
+fun MainScreen(viewModel: MainViewModel, embedded: @Composable (Double) -> Unit) {
+    val radians = viewModel.radians
         .catch { e ->
             println("Error in radiansFlow: ${e.message}")
             e.printStackTrace()

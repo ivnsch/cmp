@@ -18,8 +18,9 @@ fun create(
     deps: Deps,
     createUIViewController: () -> UIViewController
 ): UIViewController {
+    val viewModel = MainViewModel(deps.webSockets)
     return ComposeUIViewController {
-        MainContent(deps.webSockets, embedded = { radians ->
+        MainScreen(viewModel, embedded = { radians ->
             IOSEmbedded(createUIViewController, radians)
         })
     }
